@@ -1,6 +1,8 @@
 import json
+from importlib.metadata import version
 from os import getenv
-from typing import Any, Dict, List, Optional
+from platform import architecture, python_version
+from typing import Optional
 
 from oxylabs import RealtimeClient
 
@@ -35,10 +37,13 @@ class OxylabsTools(Toolkit):
         self.password = password or getenv("OXYLABS_PASSWORD")
         if not self.username or not self.password:
             logger.error("OXYLABS_USERNAME and/or OXYLABS_PASSWORD not set. Please set the environment variables.")
-        self.client = RealtimeClient(self.username, self.password)
+        bits, _ = architecture()
+        sdk_type = f"oxylabs-agno-sdk-python/{version('agno')} ({python_version()}; {bits})"
+        self.client = RealtimeClient(self.username, self.password, sdk_type=sdk_type)
         self.register(self.google_search)
         self.register(self.amazon_product)
         self.register(self.universal)
+        self.register(self.amazon_search)
 
     def google_search(self, **kwargs) -> str:
         """Perform a Google search using Oxylabs SERP API via SDK resource-specific method."""
