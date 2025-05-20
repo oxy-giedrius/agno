@@ -27,8 +27,8 @@ print(response)
 
 # # Initialize the OxylabsTools with your credentials (or set env vars)
 # oxylabs_tools = OxylabsTools(
-#     username="YOUR_OXYLABS_USERNAME",  # or set OXYLABS_USERNAME env var
-#     password="YOUR_OXYLABS_PASSWORD",  # or set OXYLABS_PASSWORD env var
+#     username="OXYLABS_USERNAME",  # or set OXYLABS_USERNAME env var
+#     password="OXYLABS_PASSWORD",  # or set OXYLABS_PASSWORD env var
 # )
 
 # # Example: Google Search
