@@ -1,9 +1,7 @@
 from agno.agent import Agent
 from agno.tools.oxylabs import OxylabsTools
-from agno.models.openai import OpenAIChat
 
 agent = Agent(
-    model=OpenAIChat(id="gpt-4o"),
     tools=[OxylabsTools()],
     markdown=True,
     show_tool_calls=True,
