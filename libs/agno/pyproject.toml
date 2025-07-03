@@ -109,7 +109,6 @@ webex = ["webexpythonsdk"]
 yfinance = ["yfinance"]
 youtube = ["youtube_transcript_api"]
 zep = ["zep-cloud"]
-google_bigquery = ["google-cloud-bigquery"]
 oxylabs = ["oxylabs"]
 
 # Dependencies for Storage

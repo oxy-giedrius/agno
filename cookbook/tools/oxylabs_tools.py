@@ -1,48 +1,29 @@
 from agno.agent import Agent
 from agno.tools.oxylabs import OxylabsTools
-
-# Initialise the toolkit (credentials can come from env vars)
-oxylabs_tools = OxylabsTools()  # picks up OXYLABS_USERNAME / OXYLABS_PASSWORD
+from agno.models.openai import OpenAIChat
+oxylabs_tools = OxylabsTools()
 
 agent = Agent(
+    model=OpenAIChat(id="gpt-4o"),
     tools=[oxylabs_tools],
-    show_tool_calls=True,  # display intermediate tool I/O
-    markdown=True,  # pretty-print Markdown in the final answer
+    markdown=True,
+    show_tool_calls=True,
 )
 
-response = agent.run("""
-1. Google-search “OpenAI GPT-4” and give me the first 3 organic results.
-2. Fetch the Amazon product with ASIN B09JRKG3LC and show its title and price.
-3. Scrape https://example.com and return the page <title>.
-""")
+# Example 1: Google Search
+agent.print_response(
+    "Let's search for 'latest iPhone reviews' and provide a summary of the top 3 results. ",
+)
 
-print(response)
-
-
-# LOW LEVEL EXAMPLE
-
-# ------------------------------------------------------------------------------------------------
-# Uncomment the following to use the OxylabsTools with your own credentials
-# ------------------------------------------------------------------------------------------------
-
-# # Initialize the OxylabsTools with your credentials (or set env vars)
-# oxylabs_tools = OxylabsTools(
-#     username="OXYLABS_USERNAME",  # or set OXYLABS_USERNAME env var
-#     password="OXYLABS_PASSWORD",  # or set OXYLABS_PASSWORD env var
+# Example 2: Amazon Product Search
+# agent.print_response(
+#     "Let's search for an Amazon product with ASIN 'B07FZ8S74R' (Echo Dot). ",
 # )
 
-# # Example: Google Search
-# print("Google Search Result:")
-# print(oxylabs_tools.google_search(query="OpenAI GPT-4", parse=True))
-
-# # Example: Amazon Product
-# print("Amazon Product Result:")
-# print(oxylabs_tools.amazon_product(query="B09JRKG3LC", parse=True))
-
-# # Example: Amazon Search
-# print("Amazon Search Result:")
-# print(oxylabs_tools.amazon_search(query="wireless mouse", parse=True))
-
-# # Example: Universal Scraper
-# print("Universal Scraper Result:")
-# print(oxylabs_tools.universal(url="https://example.com", parse=True))
+# Example 3: Multi-Domain Amazon Search
+# agent.print_response(
+#     "Use search_amazon_products to search for 'gaming keyboards' on both:\n"
+#     "1. Amazon US (domain='com')\n"
+#     "2. Amazon UK (domain='co.uk')\n"
+#     "Compare the top 3 results from each region including pricing and availability."
+# )
