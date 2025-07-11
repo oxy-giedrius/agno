@@ -1,3 +1,4 @@
+import enum
 from typing import Dict, List
 
 from pydantic import BaseModel, Field
@@ -22,7 +23,7 @@ class MovieScript(BaseModel):
     storyline: str = Field(..., description="3 sentence storyline for the movie. Make it exciting!")
     rating: Dict[str, int] = Field(
         ...,
-        description="Your own rating of the movie. 1-10. Return a dictionary with the keys 'story' and 'acting'.",
+        description="Your own rating of the movie. 1 to 5. Return a dictionary with the keys 'story' and 'acting'.",
     )
 
 
@@ -41,3 +42,27 @@ def test_structured_response_with_dict_fields():
     assert isinstance(response.content.name, str)
     assert isinstance(response.content.characters, List)
     assert isinstance(response.content.storyline, str)
+
+
+def test_structured_response_with_enum_fields():
+    class Grade(enum.Enum):
+        A_PLUS = "a+"
+        A = "a"
+        B = "b"
+        C = "c"
+        D = "d"
+        F = "f"
+
+    class Recipe(BaseModel):
+        recipe_name: str
+        rating: Grade
+
+    structured_output_agent = Agent(
+        model=Gemini(id="gemini-2.0-flash"),
+        description="You help generate recipe names and ratings.",
+        response_model=Recipe,
+    )
+    response = structured_output_agent.run("Generate a recipe name and rating.")
+    assert response.content is not None
+    assert isinstance(response.content.rating, Grade)
+    assert isinstance(response.content.recipe_name, str)
